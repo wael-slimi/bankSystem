@@ -25,13 +25,14 @@ public class Main {
             }
         } else if ("epargue".equals(account.getAccountType())) {
             if(amount<=(account.getBalance()/2)){
+                float fee = amount*0.05f;
                 account.setBalance(account.getBalance() - amount);
                 System.out.println("-----------------------------------------------------------------------------------------");
-                System.out.println("Withdrawal of " + amount + " successful. New balance: " + account.getBalance());
+                System.out.println("Withdrawal of " + (amount - fee ) + " successful withe fee= "+ fee +". New balance: " + account.getBalance());
                 System.out.println("-----------------------------------------------------------------------------------------");
             }else{
                 System.out.println("-----------------------------------------------------------------------------------------");
-                System.out.println("you are not allaw to withdraw this amount .You can withdraw only "+account.getBalance()/2);
+                System.out.println("you are not allaw to withdraw this "+amount+" .You can withdraw only "+account.getBalance()/2);
                 System.out.println("-----------------------------------------------------------------------------------------");
             }
             
@@ -101,7 +102,7 @@ public class Main {
         do {
             System.out.println("\n***************************************************************************");
             System.out.println("Choose an option:");
-            System.out.println("1) Create an account");
+            System.out.println("1) Create account");
             System.out.println("2) deposit");
             System.out.println("3) withdrow");
             System.out.println("4) Transfer");
@@ -116,42 +117,71 @@ public class Main {
                     main.dataBase.add(account);
                     break;
                 case 2:
-                    System.out.println("Option 2");
+
+                    boolean isValidIdForDeposit = false;
+                    int depositId = -1;
+                
+                    while (!isValidIdForDeposit) {
+                        System.out.println("Enter the account ID for deposit: ");
+                        depositId = scanner.nextInt();
+                        scanner.nextLine();
+                
+                        for (Account a : main.dataBase) {
+                            if (a.getCustomer() == depositId) {
+                                isValidIdForDeposit = true;
+                                break;
+                            }
+                        }
+                
+                        if (!isValidIdForDeposit) {
+                            System.out.println("Invalid account ID. Please enter a valid ID.");
+                        }
+                    }
+                
+                    System.out.println("-----------------------------------------------------------------------------------------");
+                    System.out.println("Valid account ID entered for deposit: " + depositId);
+                    System.out.println("-----------------------------------------------------------------------------------------");
+                
+                    Account depositAccount = main.dataBase.get(depositId - 1);
+                
+                    System.out.print("Enter the deposit amount for " + depositAccount.getName() + " (current balance: " + depositAccount.getBalance() + "): ");
+                    float depositAmount = scanner.nextFloat();
+                    main.deposit(depositAmount, depositAccount);
                     break;
-                    case 3:
-                        boolean isValidId = false;
-                        int id = -1;
-                        
-                        while (!isValidId) {
-                            System.out.println("Enter the account ID: ");
-                            id = scanner.nextInt();
-                            scanner.nextLine(); 
-                        
-                            for (Account a : main.dataBase) {
-                                if (a.getCustomer() == id) {
-                                    isValidId = true;
-                                    break;  
-                                }
-                            }
-                        
-                            if (!isValidId) {
-                                System.out.println("Invalid account ID. Please enter a valid ID.");
+                
+                case 3:
+                    boolean isValidId = false;
+                    int id = -1;
+                    while (!isValidId) {
+                        System.out.println("Enter the account ID: ");
+                        id = scanner.nextInt();
+                        scanner.nextLine(); 
+                    
+                        for (Account a : main.dataBase) {
+                            if (a.getCustomer() == id) {
+                                isValidId = true;
+                                break;  
                             }
                         }
-                        System.out.println("-----------------------------------------------------------------------------------------");
-                        System.out.println("Valid account ID entered: " + id);
-                        System.out.println("-----------------------------------------------------------------------------------------");
-                        
-                        Account withdrawAccount = main.dataBase.get(id-1);
-                        if("courant".equals(withdrawAccount.getAccountType())){
-                            System.out.print(" enter the withdrawal amount for " + withdrawAccount.getName() + "with id= "+withdrawAccount.getCustomer()+" (your current amount="+withdrawAccount.getBalance()+") : ");
-                        }else{
-                            System.out.print(" enter the withdrawal amount for " + withdrawAccount.getName() + "with id= "+withdrawAccount.getCustomer()+" (your current amount="+withdrawAccount.getBalance()+")your not allowed to withdraw only the half of the amount : ");
+                    
+                        if (!isValidId) {
+                            System.out.println("Invalid account ID. Please enter a valid ID.");
                         }
+                    }
+                    System.out.println("-----------------------------------------------------------------------------------------");
+                    System.out.println("Valid account ID entered: " + id);
+                    System.out.println("-----------------------------------------------------------------------------------------");
+                    
+                    Account withdrawAccount = main.dataBase.get(id-1);
+                    if("courant".equals(withdrawAccount.getAccountType())){
+                        System.out.print(" enter the withdrawal amount for " + withdrawAccount.getName() + "with id= "+withdrawAccount.getCustomer()+" (your current amount="+withdrawAccount.getBalance()+") : ");
+                    }else{
+                        System.out.print(" enter the withdrawal amount for " + withdrawAccount.getName() + "with id= "+withdrawAccount.getCustomer()+" (your current amount="+withdrawAccount.getBalance()+")your not allowed to withdraw only the half of the amount : ");
+                    }
                         
-                        float withdrawalAmount = scanner.nextFloat();
-                        main.withdraw(withdrawalAmount, withdrawAccount);                    
-                        break;
+                    float withdrawalAmount = scanner.nextFloat();
+                    main.withdraw(withdrawalAmount, withdrawAccount);                    
+                    break;
                 case 4:
                     System.out.println("Option 4");
                     break;
@@ -168,4 +198,25 @@ public class Main {
        
         scanner.close();
     }
+
+    public void deposit(float amount, Account account){
+        if ("courant".equals(account.getAccountType())) {
+            float fee = amount *0.1f;            
+            account.setBalance(account.getBalance() + (amount - fee ));
+            System.out.println("-----------------------------------------------------------------------------------------");
+            System.out.println("Deposit of " + (amount - fee) + " successful with %10 "+ fee +". New balance: " + account.getBalance());
+            System.out.println("-----------------------------------------------------------------------------------------");
+        } else if ("epargue".equals(account.getAccountType())) {
+            float fee = amount*0.05f;
+            account.setBalance(account.getBalance() + (amount-fee));
+            System.out.println("-----------------------------------------------------------------------------------------");
+            System.out.println("deposit of " + (amount - fee ) + " successful withe %5 fee= "+ fee +". New balance: " + account.getBalance());
+            System.out.println("-----------------------------------------------------------------------------------------");
+
+            
+        } else {
+            System.out.println("Invalid account type.");
+        }
+    }
+
 }
