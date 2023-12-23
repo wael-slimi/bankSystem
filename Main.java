@@ -13,6 +13,34 @@ public class Main {
         return "AC" + timestamp + lastCustomerId;
     }
 
+    public static String AccountType() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Shouse account type: ");
+        System.out.println("1) Courant");
+        System.out.println("2) Epargue");
+
+        int option = scanner.nextInt();
+        scanner.nextLine(); 
+
+        String type = ""; 
+
+        switch (option) {
+            case 1:
+                type = "courant";
+                break;
+            case 2:
+                type = "epargue";
+                break;
+            default:
+                System.out.println("Invalid option");
+                break;
+        }
+        
+        scanner.close(); 
+        return type;
+    }
+
     public Account createAccount() {
         Scanner scanner = new Scanner(System.in);
     
@@ -32,9 +60,13 @@ public class Main {
     
         
         String account_number = generateAccountNumber();
-    
-        System.out.print("Enter account type: ");
-        String accountType = scanner.nextLine();
+        String accountType;
+        /*do{
+            System.out.print("account type:(courant/epargue)");
+            accountType = scanner.nextLine();
+        }while(!accountType.equals("courant") && !accountType.equals("epargue"));
+        */
+        accountType=Main.AccountType();
     
         float balance = 0.0f;
     
