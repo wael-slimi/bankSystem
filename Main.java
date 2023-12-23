@@ -12,35 +12,35 @@ public class Main {
         String timestamp = dateFormat.format(new Date());
         return "AC" + timestamp + lastCustomerId;
     }
-/* 
-    public static String AccountType() {
-        Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Shouse account type: ");
-        System.out.println("1) Courant");
-        System.out.println("2) Epargue");
-
-        int option = scanner.nextInt();
-        scanner.nextLine(); 
-
-        String type = ""; 
-
-        switch (option) {
-            case 1:
-                type = "courant";
-                break;
-            case 2:
-                type = "epargue";
-                break;
-            default:
-                System.out.println("Invalid option");
-                break;
+    public void withdraw(float amount, Account account) {
+        if ("courant".equals(account.getAccountType())) {
+            
+            if (account.getBalance() >= amount) {
+                account.setBalance(account.getBalance() - amount);
+                System.out.println("Withdrawal of " + amount + " successful. New balance: " + account.getBalance());
+            } else {
+                System.out.println("Insufficient funds for withdrawal.");
+                System.out.println("To take a loan, please visit the bank.");
+            }
+        } else if ("epargue".equals(account.getAccountType())) {
+            if(amount<=(account.getBalance()/2)){
+                account.setBalance(account.getBalance() - amount);
+                System.out.println("-----------------------------------------------------------------------------------------");
+                System.out.println("Withdrawal of " + amount + " successful. New balance: " + account.getBalance());
+                System.out.println("-----------------------------------------------------------------------------------------");
+            }else{
+                System.out.println("-----------------------------------------------------------------------------------------");
+                System.out.println("you are not allaw to withdraw this amount .You can withdraw only "+account.getBalance()/2);
+                System.out.println("-----------------------------------------------------------------------------------------");
+            }
+            
+        } else {
+            System.out.println("Invalid account type.");
         }
-        
-        scanner.close(); 
-        return type;
     }
-*/
+
+
     public Account createAccount() {
         Scanner scanner = new Scanner(System.in);
     
@@ -49,7 +49,7 @@ public class Main {
     
         System.out.println("Creating a new account with customer ID: " + lastCustomerId);
     
-        System.out.print("Enter customer name: ");
+        System.out.print("Enter customer full name: ");
         String name = scanner.nextLine();
     
         System.out.print("Enter customer address: ");
@@ -73,7 +73,7 @@ public class Main {
         boolean validInput = false;
         while (!validInput) {
             try {
-                System.out.print("Enter initial balance: ");
+                System.out.println("Enter initial balance: ");
                 balance = scanner.nextFloat();
     
                 if (balance < 0) {
@@ -99,10 +99,11 @@ public class Main {
         Main main = new Main();
 
         do {
-            System.out.println("\nChoose an option:");
+            System.out.println("\n***************************************************************************");
+            System.out.println("Choose an option:");
             System.out.println("1) Create an account");
-            System.out.println("2) Load accounts");
-            System.out.println("3) Retrieve");
+            System.out.println("2) deposit");
+            System.out.println("3) withdrow");
             System.out.println("4) Transfer");
             System.out.println("0) Exit");
 
@@ -117,9 +118,40 @@ public class Main {
                 case 2:
                     System.out.println("Option 2");
                     break;
-                case 3:
-                    System.out.println("Option 3");
-                    break;
+                    case 3:
+                    boolean isValidId = false;
+                    int id = -1;
+                    
+                    while (!isValidId) {
+                        System.out.println("Enter the account ID: ");
+                        id = scanner.nextInt();
+                        scanner.nextLine(); 
+                    
+                        for (Account a : main.dataBase) {
+                            if (a.getCustomer() == id) {
+                                isValidId = true;
+                                break;  
+                            }
+                        }
+                    
+                        if (!isValidId) {
+                            System.out.println("Invalid account ID. Please enter a valid ID.");
+                        }
+                    }
+                    System.out.println("-----------------------------------------------------------------------------------------");
+                    System.out.println("Valid account ID entered: " + id);
+                    System.out.println("-----------------------------------------------------------------------------------------");
+                        
+                        Account withdrawAccount = main.dataBase.get(id-1);
+                        if("courant".equals(withdrawAccount.getAccountType())){
+                            System.out.print(" enter the withdrawal amount for " + withdrawAccount.getName() + "with id= "+withdrawAccount.getCustomer()+" (your current amount="+withdrawAccount.getBalance()+") : ");
+                        }else{
+                            System.out.print(" enter the withdrawal amount for " + withdrawAccount.getName() + "with id= "+withdrawAccount.getCustomer()+" (your current amount="+withdrawAccount.getBalance()+")your not allowed to withdraw only the half of the amount : ");
+                        }
+                        
+                        float withdrawalAmount = scanner.nextFloat();
+                        main.withdraw(withdrawalAmount, withdrawAccount);                    
+                        break;
                 case 4:
                     System.out.println("Option 4");
                     break;

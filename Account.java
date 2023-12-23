@@ -43,7 +43,7 @@ public class Account {
     }
 
     public String toString() {
-        return  " - Account Number: " + account_number + ", Account Type: " + accountType + ", Balance: " + balance;
+        return"-Customer: "+name+", Account Number: " + account_number + ", Account Type: " + accountType + ", Balance: " + balance;
     }
 
     public void deposit(float amount) {
