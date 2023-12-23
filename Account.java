@@ -1,16 +1,14 @@
-import java.util.List;
-import java.util.Scanner;
-
-import javax.swing.text.BadLocationException;
-
 public class Account {
     private int customer_id;
     private String name;
+    private String address;
     private String account_number;
     private String accountType;
     private float balance = 0.0f;
 
     public Account(int customer_id, String name, String address, String contact_number, String account_number, String accountType, float balance) {
+        this.name=name;
+        this.address=address;
         this.customer_id = customer_id;
         this.account_number = account_number;
         this.accountType = accountType;
@@ -19,6 +17,17 @@ public class Account {
 
     public String getAccountNumber() {
         return account_number;
+    }
+
+    public String getName(){
+        return name;
+    }
+    public int getCustomer(){
+        return customer_id;
+    }
+
+    public String getAddress(){
+        return address;
     }
 
     public String getAccountType() {
@@ -34,7 +43,7 @@ public class Account {
     }
 
     public String toString() {
-        return super.toString() + " - Account Number: " + account_number + ", Account Type: " + accountType + ", Balance: " + balance;
+        return  " - Account Number: " + account_number + ", Account Type: " + accountType + ", Balance: " + balance;
     }
 
     public void deposit(float amount) {
