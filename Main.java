@@ -12,7 +12,7 @@ public class Main {
         String timestamp = dateFormat.format(new Date());
         return "AC" + timestamp + lastCustomerId;
     }
-
+/* 
     public static String AccountType() {
         Scanner scanner = new Scanner(System.in);
 
@@ -40,7 +40,7 @@ public class Main {
         scanner.close(); 
         return type;
     }
-
+*/
     public Account createAccount() {
         Scanner scanner = new Scanner(System.in);
     
@@ -61,12 +61,11 @@ public class Main {
         
         String account_number = generateAccountNumber();
         String accountType;
-        /*do{
+        do{
             System.out.print("account type:(courant/epargue)");
             accountType = scanner.nextLine();
         }while(!accountType.equals("courant") && !accountType.equals("epargue"));
-        */
-        accountType=Main.AccountType();
+        
     
         float balance = 0.0f;
     
