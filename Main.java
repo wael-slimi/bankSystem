@@ -119,28 +119,28 @@ public class Main {
                     System.out.println("Option 2");
                     break;
                     case 3:
-                    boolean isValidId = false;
-                    int id = -1;
-                    
-                    while (!isValidId) {
-                        System.out.println("Enter the account ID: ");
-                        id = scanner.nextInt();
-                        scanner.nextLine(); 
-                    
-                        for (Account a : main.dataBase) {
-                            if (a.getCustomer() == id) {
-                                isValidId = true;
-                                break;  
+                        boolean isValidId = false;
+                        int id = -1;
+                        
+                        while (!isValidId) {
+                            System.out.println("Enter the account ID: ");
+                            id = scanner.nextInt();
+                            scanner.nextLine(); 
+                        
+                            for (Account a : main.dataBase) {
+                                if (a.getCustomer() == id) {
+                                    isValidId = true;
+                                    break;  
+                                }
+                            }
+                        
+                            if (!isValidId) {
+                                System.out.println("Invalid account ID. Please enter a valid ID.");
                             }
                         }
-                    
-                        if (!isValidId) {
-                            System.out.println("Invalid account ID. Please enter a valid ID.");
-                        }
-                    }
-                    System.out.println("-----------------------------------------------------------------------------------------");
-                    System.out.println("Valid account ID entered: " + id);
-                    System.out.println("-----------------------------------------------------------------------------------------");
+                        System.out.println("-----------------------------------------------------------------------------------------");
+                        System.out.println("Valid account ID entered: " + id);
+                        System.out.println("-----------------------------------------------------------------------------------------");
                         
                         Account withdrawAccount = main.dataBase.get(id-1);
                         if("courant".equals(withdrawAccount.getAccountType())){
