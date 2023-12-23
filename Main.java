@@ -16,7 +16,7 @@ public class Main {
     public Account createAccount() {
         Scanner scanner = new Scanner(System.in);
     
-        // Increment customer_id for the new account
+
         lastCustomerId++;
     
         System.out.println("Creating a new account with customer ID: " + lastCustomerId);
@@ -30,7 +30,7 @@ public class Main {
         System.out.print("Enter customer contact number: ");
         String contact_number = scanner.nextLine();
     
-        // Automatically generate account number based on timestamp and customer ID
+        
         String account_number = generateAccountNumber();
     
         System.out.print("Enter account type: ");
@@ -38,7 +38,7 @@ public class Main {
     
         float balance = 0.0f;
     
-        // Input validation and exception handling for balance
+        
         boolean validInput = false;
         while (!validInput) {
             try {
@@ -52,11 +52,11 @@ public class Main {
                 validInput = true;
             } catch (Exception e) {
                 System.out.println("Invalid input for balance. Please enter a valid non-negative numeric value.");
-                scanner.nextLine(); // Consume the invalid input
+                scanner.nextLine(); 
             }
         }
     
-        // Do not close the scanner here
+
     
         return new Account(lastCustomerId, name, address, contact_number, account_number, accountType, balance);
     }
@@ -76,8 +76,7 @@ public class Main {
             System.out.println("0) Exit");
 
             option = scanner.nextInt();
-            scanner.nextLine(); // Consume the newline character after reading the integer
-
+            scanner.nextLine(); 
             switch (option) {
                 case 1:
                     Account account = main.createAccount();
@@ -103,7 +102,7 @@ public class Main {
 
         } while (option != 0);
 
-        // Close the Scanner when you are done with input
+       
         scanner.close();
     }
 }
