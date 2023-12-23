@@ -41,6 +41,45 @@ public class Main {
         }
     }
 
+    public void deposit(float amount, Account account){
+        if ("courant".equals(account.getAccountType())) {
+            float fee = amount *0.1f;            
+            account.setBalance(account.getBalance() + (amount - fee ));
+            System.out.println("-----------------------------------------------------------------------------------------");
+            System.out.println("Deposit of " + (amount - fee) + " successful with %10 "+ fee +". New balance: " + account.getBalance());
+            System.out.println("-----------------------------------------------------------------------------------------");
+        } else if ("epargue".equals(account.getAccountType())) {
+            float fee = amount*0.05f;
+            account.setBalance(account.getBalance() + (amount-fee));
+            System.out.println("-----------------------------------------------------------------------------------------");
+            System.out.println("deposit of " + (amount - fee ) + " successful withe %5 fee= "+ fee +". New balance: " + account.getBalance());
+            System.out.println("-----------------------------------------------------------------------------------------");
+
+            
+        } else {
+            System.out.println("Invalid account type.");
+        }
+    }
+
+
+    public void transfer(float amount, Account sourceAccount, Account targetAccount) {
+        if ("courant".equals(sourceAccount.getAccountType())) {
+            if (sourceAccount.getBalance() >= amount) {
+                sourceAccount.setBalance(sourceAccount.getBalance() - amount);
+                targetAccount.setBalance(targetAccount.getBalance() + amount);
+                System.out.println("Transfer of " + amount + " from " + sourceAccount.getName() +
+                        " to " + targetAccount.getName() + " successful.");
+                System.out.println("New balance of " + sourceAccount.getName() + ": " + sourceAccount.getBalance());
+                System.out.println("New balance of " + targetAccount.getName() + ": " + targetAccount.getBalance());
+            } else {
+                System.out.println("Insufficient funds for the transfer from " + sourceAccount.getName());
+            }
+        } else {
+            System.out.println("Transfer can only be initiated from a 'courant' account.");
+        }
+    }
+    
+
 
     public Account createAccount() {
         Scanner scanner = new Scanner(System.in);
@@ -182,9 +221,45 @@ public class Main {
                     float withdrawalAmount = scanner.nextFloat();
                     main.withdraw(withdrawalAmount, withdrawAccount);                    
                     break;
+                
                 case 4:
-                    System.out.println("Option 4");
+                    boolean isValidSourceId = false;
+                    int sourceId = -1;
+                    while (!isValidSourceId) {
+                        System.out.println("Enter the source account ID for transfer: ");
+                        sourceId = scanner.nextInt();
+                        scanner.nextLine();
+                
+                        for (Account a : main.dataBase) {
+                            if (a.getCustomer() == sourceId) {
+                                isValidSourceId = true;
+                                break;
+                            }
+                        }
+                
+                        if (!isValidSourceId) {
+                            System.out.println("Invalid source account ID. Please enter a valid ID.");
+                        }
+                    }
+                
+                    System.out.println("-----------------------------------------------------------------------------------------");
+                    System.out.println("Valid source account ID entered for transfer: " + sourceId);
+                    System.out.println("-----------------------------------------------------------------------------------------");
+                
+                    Account sourceAccount = main.dataBase.get(sourceId - 1);
+                
+                    System.out.println("Enter the target account ID for transfer: ");
+                    int targetId = scanner.nextInt();
+                    scanner.nextLine();
+                
+                    Account targetAccount = main.dataBase.get(targetId - 1);
+                
+                    System.out.print("Enter the transfer amount from " + sourceAccount.getName() +" to " + targetAccount.getName() + " (current balance: " + sourceAccount.getBalance() + "): ");
+                    float transferAmount = scanner.nextFloat();
+                    main.transfer(transferAmount, sourceAccount, targetAccount);
                     break;
+                
+                
                 case 0:
                     System.out.println("Exiting...");
                     break;
@@ -199,24 +274,6 @@ public class Main {
         scanner.close();
     }
 
-    public void deposit(float amount, Account account){
-        if ("courant".equals(account.getAccountType())) {
-            float fee = amount *0.1f;            
-            account.setBalance(account.getBalance() + (amount - fee ));
-            System.out.println("-----------------------------------------------------------------------------------------");
-            System.out.println("Deposit of " + (amount - fee) + " successful with %10 "+ fee +". New balance: " + account.getBalance());
-            System.out.println("-----------------------------------------------------------------------------------------");
-        } else if ("epargue".equals(account.getAccountType())) {
-            float fee = amount*0.05f;
-            account.setBalance(account.getBalance() + (amount-fee));
-            System.out.println("-----------------------------------------------------------------------------------------");
-            System.out.println("deposit of " + (amount - fee ) + " successful withe %5 fee= "+ fee +". New balance: " + account.getBalance());
-            System.out.println("-----------------------------------------------------------------------------------------");
-
-            
-        } else {
-            System.out.println("Invalid account type.");
-        }
-    }
+   
 
 }
